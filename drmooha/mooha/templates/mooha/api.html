@@ -1,0 +1,106 @@
+{% extends 'mooha/base.html' %}
+
+{% block title %}API - Музыкальный магазин{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">API Документация</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="list-group">
+            <a href="#products" class="list-group-item list-group-item-action">Товары</a>
+            <a href="#categories" class="list-group-item list-group-item-action">Категории</a>
+            <a href="#orders" class="list-group-item list-group-item-action">Заказы</a>
+            <a href="#users" class="list-group-item list-group-item-action">Пользователи</a>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <div class="card mb-4" id="products">
+            <div class="card-body">
+                <h2 class="card-title">Товары</h2>
+                <hr>
+                
+                <h4>GET /api/products/</h4>
+                <p>Получить список всех товаров</p>
+                <pre class="bg-light p-3 rounded">
+{
+    "products": [
+        {
+            "id": 1,
+            "name": "Электрогитара Fender",
+            "price": 50000,
+            "category": "Гитары"
+        }
+    ]
+}</pre>
+
+                <h4 class="mt-4">POST /api/products/</h4>
+                <p>Создать новый товар</p>
+                <pre class="bg-light p-3 rounded">
+{
+    "name": "Название товара",
+    "price": 0,
+    "category": "Категория"
+}</pre>
+            </div>
+        </div>
+
+        <div class="card mb-4" id="categories">
+            <div class="card-body">
+                <h2 class="card-title">Категории</h2>
+                <hr>
+                
+                <h4>GET /api/categories/</h4>
+                <p>Получить список всех категорий</p>
+                <pre class="bg-light p-3 rounded">
+{
+    "categories": [
+        {
+            "id": 1,
+            "name": "Гитары"
+        }
+    ]
+}</pre>
+            </div>
+        </div>
+
+        <div class="card mb-4" id="orders">
+            <div class="card-body">
+                <h2 class="card-title">Заказы</h2>
+                <hr>
+                
+                <h4>GET /api/orders/</h4>
+                <p>Получить список заказов пользователя</p>
+                <pre class="bg-light p-3 rounded">
+{
+    "orders": [
+        {
+            "id": 1,
+            "date": "2024-03-01",
+            "status": "delivered",
+            "total": 50000
+        }
+    ]
+}</pre>
+            </div>
+        </div>
+
+        <div class="card" id="users">
+            <div class="card-body">
+                <h2 class="card-title">Пользователи</h2>
+                <hr>
+                
+                <h4>GET /api/users/profile/</h4>
+                <p>Получить профиль пользователя</p>
+                <pre class="bg-light p-3 rounded">
+{
+    "id": 1,
+    "name": "Иван Иванов",
+    "email": "ivan@example.com"
+}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,47 @@
+{% extends 'mooha/base.html' %}
+
+{% block title %}Товар - Музыкальный магазин{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <img src="https://via.placeholder.com/500" class="img-fluid rounded" alt="Товар">
+    </div>
+    <div class="col-md-6">
+        <h1>Электрогитара Fender Stratocaster</h1>
+        <p class="lead">Профессиональная электрогитара для студийной работы и живых выступлений.</p>
+        
+        <div class="mb-4">
+            <h3 class="text-primary">50000 ₽</h3>
+        </div>
+
+        <div class="mb-4">
+            <h4>Характеристики:</h4>
+            <ul>
+                <li>Корпус: ольха</li>
+                <li>Гриф: клен</li>
+                <li>Накладка: палисандр</li>
+                <li>Звукосниматели: 3 сингла</li>
+                <li>Цвет: санберст</li>
+            </ul>
+        </div>
+
+        <div class="mb-4">
+            <h4>Описание</h4>
+            <p>Легендарная модель электрогитары, которая стала стандартом в музыкальной индустрии. 
+            Превосходное качество изготовления, отличное звучание и комфортная игра делают эту гитару 
+            идеальным выбором как для начинающих музыкантов, так и для профессионалов.</p>
+        </div>
+
+        <div class="mb-4">
+            <a href="{% url 'cart' %}" class="btn btn-success btn-lg">Добавить в корзину</a>
+        </div>
+
+        {% if user.is_staff %}
+        <div class="mb-4">
+            <a href="{% url 'product_edit' %}" class="btn btn-primary">Редактировать</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

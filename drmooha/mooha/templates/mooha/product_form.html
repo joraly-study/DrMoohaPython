@@ -1,0 +1,73 @@
+{% extends 'mooha/base.html' %}
+
+{% block title %}
+    {% if product %}Редактирование товара{% else %}Добавление товара{% endif %} - Музыкальный магазин
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title text-center mb-4">
+                    {% if product %}Редактирование товара{% else %}Добавление товара{% endif %}
+                </h1>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Название товара</label>
+                        <input type="text" class="form-control" id="name" name="name" 
+                               value="{{ product.name|default:'' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Категория</label>
+                        <select class="form-select" id="category" name="category" required>
+                            <option value="">Выберите категорию</option>
+                            <option value="guitars" {% if product.category == 'guitars' %}selected{% endif %}>Гитары</option>
+                            <option value="keyboards" {% if product.category == 'keyboards' %}selected{% endif %}>Клавишные</option>
+                            <option value="drums" {% if product.category == 'drums' %}selected{% endif %}>Ударные</option>
+                            <option value="studio" {% if product.category == 'studio' %}selected{% endif %}>Студийное оборудование</option>
+                            <option value="accessories" {% if product.category == 'accessories' %}selected{% endif %}>Аксессуары</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Описание</label>
+                        <textarea class="form-control" id="description" name="description" 
+                                  rows="5" required>{{ product.description|default:'' }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Цена</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="price" name="price" 
+                                   value="{{ product.price|default:'' }}" required>
+                            <span class="input-group-text">₽</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="stock" class="form-label">Количество на складе</label>
+                        <input type="number" class="form-control" id="stock" name="stock" 
+                               value="{{ product.stock|default:'' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Изображение товара</label>
+                        {% if product.image %}
+                            <div class="mb-2">
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" 
+                                     class="img-thumbnail" style="max-width: 200px;">
+                            </div>
+                        {% endif %}
+                        <input type="file" class="form-control" id="image" name="image" 
+                               accept="image/*" {% if not product %}required{% endif %}>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">
+                            {% if product %}Сохранить изменения{% else %}Добавить товар{% endif %}
+                        </button>
+                        <a href="{% url 'catalog' %}" class="btn btn-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

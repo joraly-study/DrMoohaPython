@@ -1,0 +1,82 @@
+{% extends 'mooha/base.html' %}
+
+{% block title %}Корзина - Музыкальный магазин{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Корзина</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <!-- Пример товара в корзине -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="https://via.placeholder.com/150" class="img-fluid rounded" alt="Товар">
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="card-title">Электрогитара Fender Stratocaster</h5>
+                        <p class="card-text">Цвет: санберст</p>
+                        <div class="input-group mb-3" style="max-width: 150px;">
+                            <button class="btn btn-outline-secondary" type="button">-</button>
+                            <input type="text" class="form-control text-center" value="1">
+                            <button class="btn btn-outline-secondary" type="button">+</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <h5 class="text-primary">50000 ₽</h5>
+                        <button class="btn btn-danger btn-sm">Удалить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Пример второго товара -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="https://via.placeholder.com/150" class="img-fluid rounded" alt="Товар">
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="card-title">Синтезатор Yamaha</h5>
+                        <p class="card-text">Цвет: черный</p>
+                        <div class="input-group mb-3" style="max-width: 150px;">
+                            <button class="btn btn-outline-secondary" type="button">-</button>
+                            <input type="text" class="form-control text-center" value="1">
+                            <button class="btn btn-outline-secondary" type="button">+</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <h5 class="text-primary">75000 ₽</h5>
+                        <button class="btn btn-danger btn-sm">Удалить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Итого</h5>
+                <hr>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Товары (2)</span>
+                    <span>125000 ₽</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Доставка</span>
+                    <span>0 ₽</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-3">
+                    <strong>Итого к оплате</strong>
+                    <strong>125000 ₽</strong>
+                </div>
+                <button class="btn btn-success w-100">Оформить заказ</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

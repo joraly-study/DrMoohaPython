@@ -1,0 +1,89 @@
+{% extends 'mooha/base.html' %}
+
+{% block title %}Личный кабинет - Музыкальный магазин{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Личные данные</h5>
+                <hr>
+                <form>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Имя</label>
+                        <input type="text" class="form-control" id="name" value="Иван Иванов">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" value="ivan@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Телефон</label>
+                        <input type="tel" class="form-control" id="phone" value="+7 (999) 123-45-67">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">История заказов</h5>
+                <hr>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>№ заказа</th>
+                                <th>Дата</th>
+                                <th>Статус</th>
+                                <th>Сумма</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#1234</td>
+                                <td>01.03.2024</td>
+                                <td><span class="badge bg-success">Доставлен</span></td>
+                                <td>50000 ₽</td>
+                                <td><button class="btn btn-sm btn-primary">Подробнее</button></td>
+                            </tr>
+                            <tr>
+                                <td>#1235</td>
+                                <td>05.03.2024</td>
+                                <td><span class="badge bg-warning">В пути</span></td>
+                                <td>75000 ₽</td>
+                                <td><button class="btn btn-sm btn-primary">Подробнее</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Избранные товары</h5>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Товар">
+                            <div class="card-body">
+                                <h6 class="card-title">Электрогитара Fender</h6>
+                                <p class="card-text text-primary">50000 ₽</p>
+                                <button class="btn btn-sm btn-success">В корзину</button>
+                                <button class="btn btn-sm btn-danger">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
