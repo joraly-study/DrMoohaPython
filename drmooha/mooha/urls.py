@@ -1,14 +1,19 @@
 from django.urls import path
 from . import views
 
+app_name = 'mooha'
+
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('catalog/', views.catalog, name='catalog'),
-    path('product/add/', views.product_add, name='product_add'),
-    path('product/<int:pk>/', views.product_detail, name='product_detail'),
-    path('product/<int:pk>/edit/', views.product_edit, name='product_edit'),
-    path('feedback/', views.feedback, name='feedback'),
-    path('api/', views.api_page, name='api_page'),
-    path('profile/', views.profile, name='profile'),
-    path('cart/', views.cart, name='cart'),
+    path('', views.ProductListView.as_view(), name='product_list'),
+    path('products/', views.ProductListView.as_view(), name='product_list'),
+    path('products/<int:pk>/', views.ProductDetailView.as_view(), name='product_detail'),
+    path('products/create/', views.ProductCreateView.as_view(), name='product_create'),
+    
+    path('categories/', views.CategoryListView.as_view(), name='category_list'),
+    path('categories/create/', views.CategoryCreateView.as_view(), name='category_create'),
+    path('categories/<int:category_id>/products/', views.product_by_category, name='category_products'),
+    
+    path('tags/', views.TagListView.as_view(), name='tag_list'),
+    path('tags/create/', views.TagCreateView.as_view(), name='tag_create'),
+    path('tags/<int:tag_id>/products/', views.product_by_tag, name='tag_products'),
 ]

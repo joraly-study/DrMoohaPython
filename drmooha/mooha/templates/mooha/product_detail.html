@@ -1,47 +1,61 @@
 {% extends 'mooha/base.html' %}
 
-{% block title %}Товар - Музыкальный магазин{% endblock %}
+{% block title %}{{ product.name }} - dr.mooha{% endblock %}
 
 {% block content %}
+<div class="page-header">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'mooha:product_list' %}">Товары</a></li>
+            <li class="breadcrumb-item active">{{ product.name }}</li>
+        </ol>
+    </nav>
+</div>
+
 <div class="row">
-    <div class="col-md-6">
-        <img src="https://via.placeholder.com/500" class="img-fluid rounded" alt="Товар">
-    </div>
-    <div class="col-md-6">
-        <h1>Электрогитара Fender Stratocaster</h1>
-        <p class="lead">Профессиональная электрогитара для студийной работы и живых выступлений.</p>
-        
-        <div class="mb-4">
-            <h3 class="text-primary">50000 ₽</h3>
-        </div>
-
-        <div class="mb-4">
-            <h4>Характеристики:</h4>
-            <ul>
-                <li>Корпус: ольха</li>
-                <li>Гриф: клен</li>
-                <li>Накладка: палисандр</li>
-                <li>Звукосниматели: 3 сингла</li>
-                <li>Цвет: санберст</li>
-            </ul>
-        </div>
-
-        <div class="mb-4">
-            <h4>Описание</h4>
-            <p>Легендарная модель электрогитары, которая стала стандартом в музыкальной индустрии. 
-            Превосходное качество изготовления, отличное звучание и комфортная игра делают эту гитару 
-            идеальным выбором как для начинающих музыкантов, так и для профессионалов.</p>
-        </div>
-
-        <div class="mb-4">
-            <a href="{% url 'cart' %}" class="btn btn-success btn-lg">Добавить в корзину</a>
-        </div>
-
-        {% if user.is_staff %}
-        <div class="mb-4">
-            <a href="{% url 'product_edit' %}" class="btn btn-primary">Редактировать</a>
+    <div class="col-md-6 mb-4">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" class="img-fluid product-image" alt="{{ product.name }}">
+        {% else %}
+        <div class="product-image bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+            <i class="bi bi-image text-muted" style="font-size: 5rem;"></i>
         </div>
         {% endif %}
+    </div>
+    <div class="col-md-6">
+        <div class="product-info">
+            <h1 class="mb-4">{{ product.name }}</h1>
+            <div class="mb-4">
+                <h2 class="h3 text-primary mb-3">{{ product.price }} ₽</h2>
+                <p class="text-muted">{{ product.description }}</p>
+            </div>
+            
+            <div class="mb-4">
+                <h3 class="h5 mb-3">Категория</h3>
+                <a href="{% url 'mooha:category_products' product.category.id %}" class="badge bg-primary text-decoration-none">
+                    {{ product.category.name }}
+                </a>
+            </div>
+
+            {% if product.tags.all %}
+            <div class="mb-4">
+                <h3 class="h5 mb-3">Теги</h3>
+                <div class="d-flex flex-wrap gap-2">
+                    {% for tag in product.tags.all %}
+                    <a href="{% url 'mooha:tag_products' tag.id %}" class="badge bg-light text-dark text-decoration-none">
+                        {{ tag.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="d-flex gap-2">
+                <a href="{% url 'mooha:product_list' %}" class="btn btn-light">
+                    <i class="bi bi-arrow-left me-1"></i>Назад к списку
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %} 

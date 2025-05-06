@@ -1,16 +1,16 @@
 {% extends 'mooha/base.html' %}
 
 {% block title %}
-{% if form.instance.pk %}Редактирование товара{% else %}Добавление товара{% endif %} - dr.mooha
+{% if form.instance.pk %}Редактирование тега{% else %}Добавление тега{% endif %} - dr.mooha
 {% endblock %}
 
 {% block content %}
 <div class="page-header">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'mooha:product_list' %}">Товары</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'mooha:tag_list' %}">Теги</a></li>
             <li class="breadcrumb-item active">
-                {% if form.instance.pk %}Редактирование товара{% else %}Добавление товара{% endif %}
+                {% if form.instance.pk %}Редактирование тега{% else %}Добавление тега{% endif %}
             </li>
         </ol>
     </nav>
@@ -22,13 +22,13 @@
             <div class="card-body">
                 <h1 class="card-title mb-4">
                     {% if form.instance.pk %}
-                    <i class="bi bi-pencil-square me-2"></i>Редактирование товара
+                    <i class="bi bi-pencil-square me-2"></i>Редактирование тега
                     {% else %}
-                    <i class="bi bi-plus-lg me-2"></i>Добавление товара
+                    <i class="bi bi-plus-lg me-2"></i>Добавление тега
                     {% endif %}
                 </h1>
 
-                <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <form method="post" class="needs-validation" novalidate>
                     {% csrf_token %}
                     
                     {% for field in form %}
@@ -44,9 +44,6 @@
                         <textarea name="{{ field.name }}" id="{{ field.id_for_label }}" 
                                 class="form-control {% if field.errors %}is-invalid{% endif %}"
                                 rows="4">{{ field.value|default:'' }}</textarea>
-                        {% elif field.name == 'image' %}
-                        <input type="file" name="{{ field.name }}" id="{{ field.id_for_label }}"
-                               class="form-control {% if field.errors %}is-invalid{% endif %}">
                         {% else %}
                         <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" 
                                id="{{ field.id_for_label }}" value="{{ field.value|default:'' }}"
@@ -71,7 +68,7 @@
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-check-lg me-1"></i>Сохранить
                         </button>
-                        <a href="{% url 'mooha:product_list' %}" class="btn btn-light">
+                        <a href="{% url 'mooha:tag_list' %}" class="btn btn-light">
                             <i class="bi bi-x-lg me-1"></i>Отмена
                         </a>
                     </div>

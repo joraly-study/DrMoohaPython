@@ -1,0 +1,94 @@
+{% extends 'mooha/base.html' %}
+
+{% block title %}Товары - dr.mooha{% endblock %}
+
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h1><i class="bi bi-grid-3x3-gap me-2"></i>Товары</h1>
+    <a href="{% url 'mooha:product_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i>Добавить товар
+    </a>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for product in products %}
+    <div class="col">
+        <div class="card h-100">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            {% else %}
+            <div class="card-img-top bg-light d-flex align-items-center justify-content-center">
+                <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text text-muted">{{ product.description|truncatewords:20 }}</p>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="h5 mb-0">{{ product.price }} ₽</span>
+                    <span class="badge bg-primary">{{ product.category.name }}</span>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    {% for tag in product.tags.all %}
+                    <span class="badge bg-light text-dark">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+                <a href="{% url 'mooha:product_detail' product.id %}" class="btn btn-primary w-100">
+                    <i class="bi bi-eye me-1"></i>Подробнее
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>Товары пока не добавлены
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if is_paginated %}
+<nav aria-label="Навигация по страницам">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1" aria-label="Первая">
+                <i class="bi bi-chevron-double-left"></i>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Предыдущая">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+        </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <li class="page-item active">
+            <span class="page-link">{{ num }}</span>
+        </li>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Следующая">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Последняя">
+                <i class="bi bi-chevron-double-right"></i>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %} 
