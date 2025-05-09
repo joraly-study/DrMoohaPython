@@ -1,9 +1,27 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
+from .api_views import (
+    CategoryViewSet, TagViewSet, ProductViewSet,
+    OrderViewSet, CartViewSet, CartItemViewSet
+)
 
 app_name = 'mooha'
 
+# Создаем роутер для API
+router = DefaultRouter()
+router.register(r'api/categories', CategoryViewSet)
+router.register(r'api/tags', TagViewSet)
+router.register(r'api/products', ProductViewSet)
+router.register(r'api/orders', OrderViewSet)
+router.register(r'api/cart', CartViewSet, basename='cart')
+router.register(r'api/cart-items', CartItemViewSet, basename='cart-items')
+
 urlpatterns = [
+    # API маршруты
+    path('', include(router.urls)),
+    
+    # Существующие маршруты
     path('', views.ProductListView.as_view(), name='product_list'),
     path('products/', views.ProductListView.as_view(), name='product_list'),
     path('products/<int:pk>/', views.ProductDetailView.as_view(), name='product_detail'),

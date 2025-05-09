@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Product, Category, Tag, Order, OrderItem, Cart, CartItem
 from .forms import ProductForm, CategoryForm, TagForm, OrderForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib import messages
 from django.db.models import Sum
 from decimal import Decimal
@@ -12,38 +13,47 @@ from django.utils import timezone
 
 TEMPLATE = 'templates/mooha'
 
+@login_required
 def home(request):
     """Начальная страница проекта"""
     return render(request, 'mooha/home.html')
 
+@login_required
 def catalog(request):
     """Страница каталога магазина"""
     return render(request, 'mooha/catalog.html')
 
+@permission_required('mooha.add_product')
 def product_add(request):
     """Страница добавления товара"""
     return render(request, 'mooha/product_form.html')
 
+@login_required
 def product_detail(request):
     """Страница вывода товара"""
     return render(request, 'mooha/product_detail.html')
 
+@permission_required('mooha.change_product')
 def product_edit(request):
     """Страница изменения товара"""
     return render(request, 'mooha/product_form.html')
 
+@login_required
 def feedback(request):
     """Страница обратной связи"""
     return render(request, 'mooha/feedback.html')
 
+@login_required
 def api_page(request):
     """Страница API"""
     return render(request, 'mooha/api.html')
 
+@login_required
 def profile(request):
     """Страница личного кабинета пользователя"""
     return render(request, 'mooha/profile.html')
 
+@login_required
 def cart(request):
     """Страница корзины"""
     return render(request, 'mooha/cart.html')
@@ -119,7 +129,7 @@ def order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     return render(request, 'mooha/order_detail.html', {'order': order})
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'mooha/product_list.html'
     context_object_name = 'products'
@@ -137,7 +147,7 @@ class ProductListView(ListView):
             
         return queryset
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = 'mooha/product_detail.html'
     context_object_name = 'product'
@@ -145,34 +155,38 @@ class ProductDetailView(DetailView):
     def get_queryset(self):
         return Product.objects.filter(is_deleted=False)
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'mooha/product_form.html'
     success_url = '/products/'
+    permission_required = 'mooha.add_product'
 
-class CategoryListView(ListView):
+class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
     template_name = 'mooha/category_list.html'
     context_object_name = 'categories'
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
     template_name = 'mooha/category_form.html'
     success_url = '/categories/'
+    permission_required = 'mooha.add_category'
 
-class TagListView(ListView):
+class TagListView(LoginRequiredMixin, ListView):
     model = Tag
     template_name = 'mooha/tag_list.html'
     context_object_name = 'tags'
 
-class TagCreateView(CreateView):
+class TagCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Tag
     form_class = TagForm
     template_name = 'mooha/tag_form.html'
     success_url = '/tags/'
+    permission_required = 'mooha.add_tag'
 
+@login_required
 def product_by_tag(request, tag_id):
     tag = get_object_or_404(Tag, id=tag_id)
     products = Product.objects.filter(tags=tag, is_deleted=False)
@@ -181,6 +195,7 @@ def product_by_tag(request, tag_id):
         'tag': tag
     })
 
+@login_required
 def product_by_category(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     products = Product.objects.filter(category=category, is_deleted=False)
