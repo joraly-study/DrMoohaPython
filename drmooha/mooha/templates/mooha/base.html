@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}dr.mooha{% endblock %}</title>
+    <title>{% block title %}DrMooha{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
@@ -232,48 +232,22 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'mooha:product_list' %}">
-                <i class="bi bi-shop me-2"></i>dr.mooha
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'product_list' %}active{% endif %}" 
-                           href="{% url 'mooha:product_list' %}">
-                            <i class="bi bi-grid-3x3-gap me-1"></i>Товары
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'category_list' %}active{% endif %}" 
-                           href="{% url 'mooha:category_list' %}">
-                            <i class="bi bi-tags me-1"></i>Категории
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'tag_list' %}active{% endif %}" 
-                           href="{% url 'mooha:tag_list' %}">
-                            <i class="bi bi-hash me-1"></i>Теги
-                        </a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <a href="{% url 'mooha:product_create' %}" class="btn btn-light btn-sm">
-                        <i class="bi bi-plus-lg me-1"></i>Добавить товар
-                    </a>
-                </div>
-            </div>
-        </div>
+    <header>
+        {% include 'mooha/components/_header.html' %}
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        {% include 'mooha/components/_nav.html' %}
     </nav>
 
-    <div class="container">
+    <main class="container mt-4">
         {% block content %}
         {% endblock %}
-    </div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        {% include 'mooha/components/_footer.html' %}
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

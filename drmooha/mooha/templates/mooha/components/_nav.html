@@ -1,0 +1,30 @@
+<div class="container">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+            {% if request.resolver_match.url_name == 'product_list' %}
+            <li class="nav-item">
+                <a href="{% url 'mooha:product_create' %}" class="nav-link">
+                    <i class="bi bi-plus-lg me-1"></i>Добавить товар
+                </a>
+            </li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'category_list' %}
+            <li class="nav-item">
+                <a href="{% url 'mooha:category_create' %}" class="nav-link">
+                    <i class="bi bi-plus-lg me-1"></i>Добавить категорию
+                </a>
+            </li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'tag_list' %}
+            <li class="nav-item">
+                <a href="{% url 'mooha:tag_create' %}" class="nav-link">
+                    <i class="bi bi-plus-lg me-1"></i>Добавить тег
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</div> 
