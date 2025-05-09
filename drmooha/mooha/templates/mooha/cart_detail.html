@@ -1,0 +1,58 @@
+{% extends 'mooha/base.html' %}
+
+{% block title %}Корзина - dr.mooha{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Корзина</h2>
+    
+    {% if cart.items.exists %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Количество</th>
+                        <th>Цена</th>
+                        <th>Сумма</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart.items.all %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>
+                            <form method="post" action="{% url 'mooha:update_cart_item' item.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control form-control-sm" style="width: 70px" onchange="this.form.submit()">
+                            </form>
+                        </td>
+                        <td>{{ item.product.price }} ₽</td>
+                        <td>{{ item.get_cost }} ₽</td>
+                        <td>
+                            <a href="{% url 'mooha:remove_from_cart' item.id %}" class="btn btn-danger btn-sm">Удалить</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end"><strong>Итого:</strong></td>
+                        <td><strong>{{ cart.get_total_price }} ₽</strong></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        <div class="text-end mt-3">
+            <a href="{% url 'mooha:checkout' %}" class="btn btn-primary">Оформить заказ</a>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Ваша корзина пуста. <a href="{% url 'mooha:product_list' %}">Перейти к товарам</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

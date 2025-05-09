@@ -1,7 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from .models import Product, Category, Tag, Order
+from .models import Product, Category, Tag, Order, OrderItem, Cart, CartItem
 from .forms import ProductForm, CategoryForm, TagForm, OrderForm
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db.models import Sum
+from decimal import Decimal
+from django.utils import timezone
 
 # Create your views here.
 
@@ -42,6 +47,77 @@ def profile(request):
 def cart(request):
     """Страница корзины"""
     return render(request, 'mooha/cart.html')
+
+@login_required
+def cart_detail(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    return render(request, 'mooha/cart_detail.html', {'cart': cart})
+
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+    
+    messages.success(request, f'Товар {product.name} добавлен в корзину')
+    return redirect('mooha:cart_detail')
+
+@login_required
+def remove_from_cart(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    cart_item.delete()
+    messages.success(request, 'Товар удален из корзины')
+    return redirect('mooha:cart_detail')
+
+@login_required
+def update_cart_item(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    quantity = int(request.POST.get('quantity', 1))
+    
+    if quantity > 0:
+        cart_item.quantity = quantity
+        cart_item.save()
+    else:
+        cart_item.delete()
+    
+    return redirect('mooha:cart_detail')
+
+@login_required
+def checkout(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    if not cart.items.exists():
+        messages.error(request, 'Ваша корзина пуста')
+        return redirect('mooha:cart_detail')
+    
+    if request.method == 'POST':
+        order = Order.objects.create(
+            order_number=f'ORD-{timezone.now().strftime("%Y%m%d%H%M%S")}',
+            delivery_address=request.POST.get('delivery_address'),
+            customer_phone=request.POST.get('customer_phone'),
+            customer_name=request.POST.get('customer_name')
+        )
+        
+        for item in cart.items.all():
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity
+            )
+        
+        cart.delete()
+        messages.success(request, 'Заказ успешно оформлен')
+        return redirect('mooha:order_detail', order_id=order.id)
+    
+    return render(request, 'mooha/checkout.html', {'cart': cart})
+
+@login_required
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'mooha/order_detail.html', {'order': order})
 
 class ProductListView(ListView):
     model = Product

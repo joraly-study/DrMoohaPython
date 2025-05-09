@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название')
@@ -52,6 +53,9 @@ class Order(models.Model):
     def __str__(self):
         return f'Заказ {self.order_number}'
 
+    def get_total_price(self):
+        return sum(item.get_cost() for item in self.items.all())
+
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
@@ -65,6 +69,39 @@ class OrderItem(models.Model):
     def __str__(self):
         return f'{self.product.name} в заказе {self.order.order_number}'
 
+    def get_cost(self):
+        return (self.product.price - self.discount) * self.quantity
+
     class Meta:
         verbose_name = 'Позиция заказа'
         verbose_name_plural = 'Позиции заказа'
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='carts', verbose_name='Пользователь')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
+
+    def __str__(self):
+        return f'Корзина пользователя {self.user.username}'
+
+    def get_total_price(self):
+        return sum(item.get_cost() for item in self.items.all())
+
+    class Meta:
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзины'
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items', verbose_name='Корзина')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='cart_items', verbose_name='Товар')
+    quantity = models.PositiveIntegerField(default=1, verbose_name='Количество')
+
+    def __str__(self):
+        return f'{self.product.name} в корзине {self.cart.id}'
+
+    def get_cost(self):
+        return self.product.price * self.quantity
+
+    class Meta:
+        verbose_name = 'Позиция корзины'
+        verbose_name_plural = 'Позиции корзины'

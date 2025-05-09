@@ -55,6 +55,13 @@
                     <i class="bi bi-arrow-left me-1"></i>Назад к списку
                 </a>
             </div>
+
+            <form method="post" action="{% url 'mooha:add_to_cart' product.id %}" class="mt-4">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-shopping-cart"></i> Добавить в корзину
+                </button>
+            </form>
         </div>
     </div>
 </div>
