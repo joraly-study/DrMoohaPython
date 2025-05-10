@@ -35,7 +35,6 @@ class IsAdminOrSellerOrReadOnly(permissions.BasePermission):
         if request.user.groups.filter(name='Администратор').exists():
             return True
         if request.user.groups.filter(name='Продавец').exists():
-            # Продавцы могут только логически удалять товары
             if request.method == 'DELETE':
                 obj.is_deleted = True
                 obj.save()

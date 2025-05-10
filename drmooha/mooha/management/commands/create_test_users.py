@@ -4,15 +4,13 @@ from django.contrib.contenttypes.models import ContentType
 from mooha.models import Product, Category, Tag
 
 class Command(BaseCommand):
-    help = 'Создает тестовых пользователей и группы с правами доступа'
+    help = 'данная команда создает тестовых пользователей и группы с правами доступа'
 
     def handle(self, *args, **kwargs):
-        # Создаем группы
         admin_group, _ = Group.objects.get_or_create(name='Администратор')
         seller_group, _ = Group.objects.get_or_create(name='Продавец')
         buyer_group, _ = Group.objects.get_or_create(name='Покупатель')
 
-        # Получаем все права доступа для моделей
         product_permissions = Permission.objects.filter(
             content_type__model='product'
         )
@@ -23,13 +21,11 @@ class Command(BaseCommand):
             content_type__model='tag'
         )
 
-        # Назначаем права группам
-        # Администратор - все права на все модели
+        #назначаем права группам
         admin_group.permissions.set(
             product_permissions | category_permissions | tag_permissions
         )
 
-        # Продавец - права на работу с товарами (кроме физического удаления)
         seller_group.permissions.set(
             Permission.objects.filter(
                 content_type__model='product',
@@ -37,7 +33,6 @@ class Command(BaseCommand):
             )
         )
 
-        # Покупатель - только права на просмотр
         buyer_group.permissions.set(
             Permission.objects.filter(
                 content_type__model__in=['product', 'category', 'tag'],
@@ -45,7 +40,6 @@ class Command(BaseCommand):
             )
         )
 
-        # Создаем суперпользователя
         if not User.objects.filter(username='admin').exists():
             superuser = User.objects.create_superuser(
                 username='admin',
@@ -56,7 +50,6 @@ class Command(BaseCommand):
         else:
             self.stdout.write(self.style.WARNING('Суперпользователь уже существует'))
 
-        # Создаем администраторов
         for i in range(2):
             username = f'admin{i+1}'
             if not User.objects.filter(username=username).exists():
@@ -70,7 +63,6 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(self.style.WARNING(f'Администратор {username} уже существует'))
 
-        # Создаем продавцов
         for i in range(3):
             username = f'seller{i+1}'
             if not User.objects.filter(username=username).exists():
@@ -84,7 +76,6 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(self.style.WARNING(f'Продавец {username} уже существует'))
 
-        # Создаем покупателей
         for i in range(4):
             username = f'buyer{i+1}'
             if not User.objects.filter(username=username).exists():

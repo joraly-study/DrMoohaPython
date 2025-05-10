@@ -26,7 +26,23 @@ SECRET_KEY = 'django-insecure-at_5%x*-bl9+_0!9ry4#9w7)%jx3(r-&gl1ft(zo3dg2*x^qs#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', '0.0.0.0']
+
+# Добавляем настройки для работы с внешними запросами
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
+
+# Настройки безопасности
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000  # 1 год
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Настройки прокси
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
@@ -79,12 +95,11 @@ WSGI_APPLICATION = 'drmooha.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': '127.0.0.1',
+        'HOST': '0.0.0.0',
         'PORT': 5430,
         'NAME': 'drmooha',
         'USER': 'postgres',
         'PASSWORD': 'postgres'
-
     }
 }
 

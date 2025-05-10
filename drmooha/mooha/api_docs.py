@@ -9,7 +9,7 @@ schema_view = get_schema_view(
         default_version='v1',
         description="API для интернет-магазина Mooha",
         terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@mooha.com"),
+        contact=openapi.Contact(email="tyomajoraly@gmail.com"),
         license=openapi.License(name="BSD License"),
     ),
     public=True,
